@@ -4,6 +4,9 @@ const PORT = process.env.PORT || 8000;
 const sequelize = require("./database/db");
 const Player = require("./models/Player");
 const Game = require("./models/Game");
+console.log(Game)
+Player.hasMany(Game);
+Game.belongsTo(Player);
 app.use(express.json());
 app.get("/", (req, res) => {
 	const date = Date.now();
@@ -20,24 +23,35 @@ app.get("/players/:id", async (req, res) => {
 	const player = await Player.findOne({ id: req.params.id });
 	res.json(player);
 });
-app.get("/a/players/:id", (req, res) => {
+app.get("/a/players/:id", async (req, res) => {
 	const a = Math.floor(Math.random() * 7) + 1;
 	const b = Math.floor(Math.random() * 7) + 1;
 	const result = a + b;
-	Game.create({ id: req.params.id, dice1: a, dice2: b });
+	let won = 0;
+	if (result === 7) {
+		return (won = 1);
+	}
+	const game = await Game.create({
+		playerId: req.params.id,
+		dice1: a,
+		dice2: b,
+		won: won,
+	})
+		.then(game => {
+			res.json(game);
+		})
+		.catch(err => {
+			res.json(err.message);
+		});
 });
 app.get("/players/update/:id", async (req, res) => {
 	const player = await Player.findOne({ where: { id: req.params.id } });
 	await player.update({ username: "Sa" }, { where: { id: req.params.id } });
 });
-const a = Math.floor(Math.random() * 7) + 1;
-const b = Math.floor(Math.random() * 7) + 1;
-const result = a + b;
-console.log(result);
+
 app.listen(PORT, () => {
 	console.log(` App runing on port http://localhost:${PORT}`);
-	Player.hasMany(Game);
-	Game.belongsTo(Player);
+
 	sequelize
 		.sync({ force: false })
 		.then(() => {

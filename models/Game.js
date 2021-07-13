@@ -1,7 +1,7 @@
 const { Sequelize, Model, DataTypes } = require("sequelize");
 const sequelize = require("../database/db");
 const Game = sequelize.define(
-	"Player",
+	"Game",
 	{
 		id: {
 			type: DataTypes.INTEGER,
