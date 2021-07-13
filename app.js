@@ -4,9 +4,7 @@ const PORT = process.env.PORT || 8000;
 const sequelize = require("./database/db");
 const Player = require("./models/Player");
 const Game = require("./models/Game");
-console.log(Game)
-Player.hasMany(Game);
-Game.belongsTo(Player);
+require("./models/association");
 app.use(express.json());
 app.get("/", (req, res) => {
 	const date = Date.now();
@@ -31,19 +29,16 @@ app.get("/a/players/:id", async (req, res) => {
 	if (result === 7) {
 		return (won = 1);
 	}
-	const game = await Game.create({
+	await Game.create({
 		playerId: req.params.id,
 		dice1: a,
 		dice2: b,
 		won: won,
-	})
-		.then(game => {
-			res.json(game);
-		})
-		.catch(err => {
-			res.json(err.message);
-		});
+	}).then(user => {
+		res.json(user);
+	});
 });
+
 app.get("/players/update/:id", async (req, res) => {
 	const player = await Player.findOne({ where: { id: req.params.id } });
 	await player.update({ username: "Sa" }, { where: { id: req.params.id } });
@@ -58,6 +53,6 @@ app.listen(PORT, () => {
 			console.log("Connection has been established successfully.");
 		})
 		.catch(err => {
-			console.log("Oh no there is somthing went wrong");
+			console.log("Oh no there is somthing went wrong" + err);
 		});
 });
