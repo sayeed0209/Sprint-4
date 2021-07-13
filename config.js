@@ -2,7 +2,7 @@ module.exports ={
     database:{
         username:'root',
         password:'',
-        database:'rest_api',
+        database:'red',
         host:'localhost'
     }
 }

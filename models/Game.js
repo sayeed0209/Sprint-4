@@ -9,10 +9,7 @@ const Game = sequelize.define(
 			allowNull: false,
 			autoIncrement: true,
 		},
-		playerId: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-		},
+		
 		dice1: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
